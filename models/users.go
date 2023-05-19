@@ -9,5 +9,5 @@ type User struct {
 	Nome    string `json:"nome"`
 	Email   string `json:"email"`
 	Usuario string `json:"usuario"`
-	Senha   string `json:"senha,omitempty"`
+	Senha   string `json:"senha"`
 }

@@ -61,6 +61,7 @@ func PutUser(c *gin.Context) {
 		param string
 		id    int
 	)
+
 	param = c.Param("user")
 	id, _ = strconv.Atoi(param)
 	user.ID = uint(id)
@@ -68,10 +69,19 @@ func PutUser(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Ocorreu um erro: " + err.Error()})
 		return
-	} else {
-		services.DB.Where("id = ?", id).
-			Or("usuario LIKE ?", param).
-			UpdateColumns(&user)
-		c.JSON(http.StatusOK, user)
 	}
+	if user.Senha != "" {
+		newPass, err := bcrypt.GenerateFromPassword([]byte(user.Senha), 10)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Senha inválida"})
+			return
+		}
+		user.Senha = string(newPass)
+	}
+
+	services.DB.Where("id = ?", id).
+		Or("usuario LIKE ?", param).
+		UpdateColumns(&user)
+	c.JSON(http.StatusOK, gin.H{"message": "Atualizado com sucesso"})
+
 }

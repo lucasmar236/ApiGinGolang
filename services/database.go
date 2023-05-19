@@ -16,7 +16,6 @@ var (
 func InitDB() {
 	stringConn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		"127.0.0.1", "postgres", "123456", "postgres", "5432")
-	fmt.Println(stringConn)
 	DB, errDb = gorm.Open(postgres.Open(stringConn), &gorm.Config{})
 	if errDb != nil {
 		log.Fatal(errDb)
