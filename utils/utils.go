@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -26,6 +27,7 @@ func GenerateJwt(user string) (string, error) {
 }
 
 func VerifyJwt(token string) error {
+	token = strings.ReplaceAll(token, "Bearer ", "")
 	tokenParse, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("erro ao validar o token")
